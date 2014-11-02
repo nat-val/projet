@@ -1,0 +1,18 @@
+proj_article_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ProjArticleBundle:Default:index }
+
+proj_article_articles:
+    path:     /articles
+    defaults: { _controller: ProjArticleBundle:Article:index }	
+
+proj_article_view:
+    path:    /article/{id}
+    defaults: { _controller: ProjArticleBundle:Article:view}
+    requirements:
+        id: \d+
+
+proj_article_add:
+    path: /article/add
+    defaults: { _controller: ProjArticleBundle:Article:add}	
+	 

@@ -1,0 +1,4 @@
+proj_article:
+    resource: "@ProjArticleBundle/Resources/config/routing.yml"
+    prefix:   /
+
