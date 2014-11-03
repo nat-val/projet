@@ -14,5 +14,4 @@ proj_article_view:
 
 proj_article_add:
     path: /article/add
-    defaults: { _controller: ProjArticleBundle:Article:add}	
-	 
+    defaults: { _controller: ProjArticleBundle:Article:add}
