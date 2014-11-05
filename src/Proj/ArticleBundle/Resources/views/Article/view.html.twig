@@ -1,0 +1,18 @@
+{# src/Proj/ArticleBundle/Resources/views/Article/view.html.twig #}
+
+<!DOCTYPE html>
+<html>
+  <head>
+        <title>Bienvenue sur mon site !</title>
+  </head>
+  <body>
+    <h1>Article {{ article_id }}</h1>
+	<p>
+      {# On affiche tous les messages flash dont le nom est « info » #}
+      {% for message in app.session.flashbag.get('info') %}
+        <p>Message flash : {{ message }}</p>
+      {% endfor %}
+    </p>
+   
+  </body>
+</html>

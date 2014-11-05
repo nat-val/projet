@@ -3,15 +3,29 @@ proj_article_homepage:
     defaults: { _controller: ProjArticleBundle:Default:index }
 
 proj_article_articles:
-    path:     /articles
-    defaults: { _controller: ProjArticleBundle:Article:index }	
+    path:     /articles/{page}
+    defaults: { _controller: ProjArticleBundle:Article:index, page: 1}	
+    requirements:
+        page: \d*	
 
 proj_article_view:
     path:    /article/{id}
-    defaults: { _controller: ProjArticleBundle:Article:view}
+    defaults: { _controller: ProjArticleBundle:Article:view }
     requirements:
         id: \d+
 
 proj_article_add:
     path: /article/add
-    defaults: { _controller: ProjArticleBundle:Article:add}
+    defaults: { _controller: ProjArticleBundle:Article:add }
+
+proj_article_edit:
+    path:    /article/edit/{id}
+    defaults: { _controller: ProjArticleBundle:Article:edit }
+    requirements:
+        id: \d+
+
+proj_article_delete:
+    path:    /article/delete/{id}
+    defaults: { _controller: ProjArticleBundle:Article:delete }
+    requirements:
+        id: \d+		
