@@ -1,13 +1,10 @@
 {# src/Proj/ArticleBundle/Resources/views/Article/index.html.twig #}
 
-<!DOCTYPE html>
-<html>
-  <head>
-        <title>Bienvenue sur mon site !</title>
-  </head>
-  <body>
-    <h1>Les articles</h1>
+{% extends "ProjArticleBundle::layout.html.twig" %}
 
-   
-  </body>
-</html>
+{% block title %}{{ parent() }} - Accueil{% endblock %}
+
+{% block body %}
+	<h1>Les articles</h1>
+	Contenu de la page d'accueil
+{% endblock %}

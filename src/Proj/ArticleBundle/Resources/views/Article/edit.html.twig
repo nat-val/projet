@@ -1,0 +1,11 @@
+{# src/Proj/ArticleBundle/Resources/views/Article/edit.html.twig #}
+
+{% extends "ProjArticleBundle::layout.html.twig" %}
+
+{% block body %}
+
+  <h2>Modification de l'article {{ article_id }}</h2>
+
+  {{ include("ProjArticleBundle:Article:form.html.twig") }}
+
+{% endblock %}

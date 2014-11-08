@@ -1,0 +1,11 @@
+{# src/Proj/ArticleBundle/Resources/views/Article/menu.html.twig #}
+
+<ul class="nav nav-pills nav-stacked">
+  {% for article in articles_list %}
+    <li>
+      <a href="{{ path('proj_article_view', {'id': article.id}) }}">
+        {{ article.title }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
