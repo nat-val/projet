@@ -2,14 +2,36 @@
 
 {% extends "ProjArticleBundle::layout.html.twig" %}
 
-{% block title %}{{ parent() }} - Article {{ article_id }}{% endblock %}
+{% block title %}{{ parent() }} - Article {{ article.id }}{% endblock %}
 
 {% block body %}
-  <h1>Article {{ article_id }}</h1>
+	<h2>{{ article.title }}</h2>
+	
 	<p>
       {# On affiche tous les messages flash dont le nom est « info » #}
       {% for message in app.session.flashbag.get('info') %}
         <p>Message flash : {{ message }}</p>
       {% endfor %}
-    </p>
+  </p>
+	
+  <i>Par {{ article.author }}, le {{ article.date|date('d/m/Y') }}</i>
+
+  <div class="well">
+    {{ article.content }}
+  </div>
+
+  <p>
+    <a href="{{ path('proj_article_articles') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à la liste
+    </a>
+    <a href="{{ path('proj_article_edit', {'id': article.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-edit"></i>
+      Modifier l'article
+    </a>
+    <a href="{{ path('proj_article_delete', {'id': article.id}) }}" class="btn btn-danger">
+      <i class="glyphicon glyphicon-trash"></i>
+      Supprimer l'article
+    </a>
+  </p>	
 {% endblock %}

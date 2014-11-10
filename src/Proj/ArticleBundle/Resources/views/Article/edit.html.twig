@@ -2,10 +2,21 @@
 
 {% extends "ProjArticleBundle::layout.html.twig" %}
 
+{% block title %}
+  Modifier un article - {{ parent() }}
+{% endblock %}
+
 {% block body %}
 
-  <h2>Modification de l'article {{ article_id }}</h2>
+  <h2>Modification de l'article {{ article.id }}</h2>
 
   {{ include("ProjArticleBundle:Article:form.html.twig") }}
+	
+	<p>
+    <a href="{{ path('proj_article_view', {'id': article.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour &agrave; l'article
+    </a>
+  </p>
 
 {% endblock %}

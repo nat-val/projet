@@ -5,6 +5,12 @@
 {% block title %}{{ parent() }} - Accueil{% endblock %}
 
 {% block body %}
-	<h1>Les articles</h1>
-	Contenu de la page d'accueil
+	<h2>Liste des articles</h2>
+	<ul>
+	{% for article in articles_list %}
+		<li><a href="{{ path('proj_article_view', {'id': article.id}) }}">{{ article.title }}</a>par {{ article.author }}, le {{ article.date|date('d/m/Y') }}</li>
+		{% else %}
+		<li>Aucun article pour le moment.</li>
+	{% endfor %}
+	</ul>
 {% endblock %}

@@ -1,19 +1,7 @@
 {# src/Proj/ArticleBundle/Resources/views/layout.html.twig #}
 
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>{% block title %}Le Projet{% endblock %}</title>
-  </head>
-  <body>
+{% extends "::base.html.twig" %}
 
-	 <div id="menu">
-      {{ render(controller("ProjArticleBundle:Article:menu")) }}
-    </div>
-	
-    {% block body %}
-    {% endblock %}
-
-  </body>
-</html>
+{% block title %}
+  Articles - {{ parent() }}
+{% endblock %}

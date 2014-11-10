@@ -15,39 +15,41 @@ class ArticleController extends Controller
 		  // une page d'erreur 404
 		  throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
 		}
-        return $this->render('ProjArticleBundle:Article:index.html.twig');
+        return $this->render('ProjArticleBundle:Article:index.html.twig', array('articles_list' => array()));
     }
 	
 	public function viewAction($id)
-    {
-        return $this->render('ProjArticleBundle:Article:view.html.twig', array('article_id' => $id));
-    }
+	{
+		$article = array('id' => $id, 'title' => 'mon article', 'content' => 'contenu de l\'article', 'author' => 'moi-meme', 'date' => new \Datetime());
+		return $this->render('ProjArticleBundle:Article:view.html.twig', array('article' => $article));
+	}
 	
 	public function addAction(Request $request)
-    {
+	{
 		$session = $request->getSession();
 		$session->getFlashBag()->add('info', 'Article bien enregistré');
 
-		return $this->redirect($this->generateUrl('proj_article_view', array('id' => 5)));
-        //return $this->render('ProjArticleBundle:Article:add.html.twig');
-    }
+		//return $this->redirect($this->generateUrl('proj_article_view', array('id' => 5)));
+		return $this->render('ProjArticleBundle:Article:add.html.twig');
+	}
 	
 	public function editAction($id)
-    {
-        return $this->render('ProjArticleBundle:Article:edit.html.twig', array('article_id' => $id));
-    }
+	{
+		$article = array('id' => $id, 'title' => 'mon article', 'content' => 'contenu de l\'article', 'author' => 'moi-meme', 'date' => new \Datetime());
+		return $this->render('ProjArticleBundle:Article:edit.html.twig', array('article' => $article));
+	}
 	
 	public function deleteAction($id)
-    {
-        return $this->render('ProjArticleBundle:Article:delete.html.twig', array('article_id' => $id));
-    }
+	{
+		return $this->render('ProjArticleBundle:Article:delete.html.twig', array('article_id' => $id));
+	}
 	
 	public function menuAction()
 	{
 		$articles_list = array(
-		    array('id' => 2, 'title' => 'La recette de la brioche'),
-		    array('id' => 5, 'title' => "L'arc en ciel"),
-		    array('id' => 9, 'title' => 'Astronomie pour débutant')
+			array('id' => 2, 'title' => 'La recette de la brioche'),
+			array('id' => 5, 'title' => "L'arc en ciel"),
+			array('id' => 9, 'title' => 'Astronomie pour débutant')
 		);
 		return $this->render('ProjArticleBundle:Article:menu.html.twig', array('articles_list' => $articles_list));
 	}
