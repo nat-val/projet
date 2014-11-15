@@ -5,6 +5,7 @@ namespace Proj\ArticleBundle\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Proj\ArticleBundle\Entity\Article;
 
 class ArticleController extends Controller
 {
@@ -20,16 +21,38 @@ class ArticleController extends Controller
 	
 	public function viewAction($id)
 	{
-		$article = array('id' => $id, 'title' => 'mon article', 'content' => 'contenu de l\'article', 'author' => 'moi-meme', 'date' => new \Datetime());
+		// on récupère le repository
+		$repository = $this->getDoctrine()->getManager()->getRepository('ProjArticleBundle:Article');
+		// on récupère l'entité correspondante à l'id
+		$article = $repository->find($id);
+		if($article === null)
+		{
+			throw new NotFoundHttpException("Cet article n'existe pas.");
+		}
 		return $this->render('ProjArticleBundle:Article:view.html.twig', array('article' => $article));
 	}
 	
 	public function addAction(Request $request)
 	{
-		$session = $request->getSession();
-		$session->getFlashBag()->add('info', 'Article bien enregistré');
-
-		//return $this->redirect($this->generateUrl('proj_article_view', array('id' => 5)));
+		// création de l'article
+		$article = new Article();
+		$article->setTitle('La couleur bleue');
+		$article->setAuthor('Titi');
+		$article->setContent("La couleur bleue est une couleur tr&egrave;s particuli&egrave;re. C'est la couleur du ciel quand il fait beau !");
+		// on récupère l'EntityManager
+		$em = $this->getDoctrine()->getManager();
+		// on persiste
+		$em->persist($article);
+		// on "flush"
+		$em->flush();
+		
+		if($request->isMethod('POST'))
+		{
+			$session = $request->getSession();
+			$session->getFlashBag()->add('info', 'Article bien enregistré');
+			return $this->redirect($this->generateUrl('proj_article_view', array('id' => $article->getId())));
+		}
+		
 		return $this->render('ProjArticleBundle:Article:add.html.twig');
 	}
 	

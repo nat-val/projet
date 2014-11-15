@@ -1,4 +1,4 @@
 services:
-#    proj_article.example:
-#        class: Proj\ArticleBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    proj_article.antispam:
+        class: Proj\ArticleBundle\Antispam\ProjAntispam
+        arguments: [@mailer, %locale%, 50]
