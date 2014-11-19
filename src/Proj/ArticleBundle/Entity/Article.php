@@ -55,6 +55,20 @@ class Article
      * @ORM\Column(name="content", type="text")
      */
     private $content;
+		
+		/**
+		 * @var \Proj\ArticleBundle\Entity\Image
+		 *
+		 * @ORM\OneToOne(targetEntity="Proj\ArticleBundle\Entity\Image", cascade={"persist"})
+		 */
+		private $image;
+
+		/**
+		 * @var \Doctrine\Common\Collections\Collection
+		 *
+		 * @ORM\ManyToMany(targetEntity="Proj\ArticleBundle\Entity\Category", cascade={"persist"})
+		 */
+		private $categories; 
 
 		public function __construct()
 		{
@@ -185,5 +199,61 @@ class Article
     public function getPublished()
     {
         return $this->published;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \Proj\ArticleBundle\Entity\Image $image
+     * @return Article
+     */
+    public function setImage(\Proj\ArticleBundle\Entity\Image $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \Proj\ArticleBundle\Entity\Image 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param \Proj\ArticleBundle\Entity\Category $category
+     * @return Article
+     */
+    public function addCategory(\Proj\ArticleBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Proj\ArticleBundle\Entity\Category $category
+     */
+    public function removeCategory(\Proj\ArticleBundle\Entity\Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

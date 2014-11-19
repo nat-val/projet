@@ -55,6 +55,18 @@ class Article
      * @ORM\Column(name="content", type="text")
      */
     private $content;
+		
+		/**
+		 * @var \Proj\ArticleBundle\Entity\Image
+		 *
+		 * @ORM\OneToOne(targetEntity="Proj\ArticleBundle\Entity\Image", cascade={"persist"})
+		 */
+		private $image;
+
+		/**
+		 * @ORM\ManyToMany(targetEntity="Proj\ArticleBundle\Entity\Category", cascade={"persist"})
+		 */
+		private $categories; 
 
 		public function __construct()
 		{
@@ -162,5 +174,51 @@ class Article
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set published
+     *
+     * @param boolean $published
+     * @return Article
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+
+    /**
+     * Get published
+     *
+     * @return boolean 
+     */
+    public function getPublished()
+    {
+        return $this->published;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \Proj\ArticleBundle\Entity\Image $image
+     * @return Article
+     */
+    public function setImage(\Proj\ArticleBundle\Entity\Image $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \Proj\ArticleBundle\Entity\Image 
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

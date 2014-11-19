@@ -6,6 +6,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Proj\ArticleBundle\Entity\Article;
+use Proj\ArticleBundle\Entity\Image;
+use Proj\ArticleBundle\Entity\Comment;
 
 class ArticleController extends Controller
 {
@@ -21,15 +23,18 @@ class ArticleController extends Controller
 	
 	public function viewAction($id)
 	{
-		// on récupère le repository
-		$repository = $this->getDoctrine()->getManager()->getRepository('ProjArticleBundle:Article');
+		// on récupère l'entity Manager
+		$em = $this->getDoctrine()->getManager();
 		// on récupère l'entité correspondante à l'id
-		$article = $repository->find($id);
+		$article = $em->getRepository('ProjArticleBundle:Article')->find($id);
 		if($article === null)
 		{
 			throw new NotFoundHttpException("Cet article n'existe pas.");
 		}
-		return $this->render('ProjArticleBundle:Article:view.html.twig', array('article' => $article));
+		// on récupère les commentaires liés à l'article
+		$comments = $em->getRepository('ProjArticleBundle:Comment')->findBy(array('article' => $article));
+		
+		return $this->render('ProjArticleBundle:Article:view.html.twig', array('article' => $article, 'comments' => $comments));
 	}
 	
 	public function addAction(Request $request)
@@ -39,10 +44,33 @@ class ArticleController extends Controller
 		$article->setTitle('La couleur bleue');
 		$article->setAuthor('Titi');
 		$article->setContent("La couleur bleue est une couleur tr&egrave;s particuli&egrave;re. C'est la couleur du ciel quand il fait beau !");
+		
+		// création de l'image
+		$image = new Image();
+		$image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+		$image->setAlt('Beau ciel !');
+		// liaison image article
+		$article->setImage($image);
+		
+		// création d'un commentaire
+		$comment1 = new Comment();
+		$comment1->setAuthor('Titi');
+		$comment1->setContent("wow ! c'est beau!");
+		// création d'un autre commentaire
+		$comment2 = new Comment();
+		$comment2->setAuthor('Tichou');
+		$comment2->setContent('Magnifique !');
+		// liaison des commentaires à l'article
+		$comment1->setArticle($article);
+		$comment2->setArticle($article);
+		
 		// on récupère l'EntityManager
 		$em = $this->getDoctrine()->getManager();
-		// on persiste
+		// on persiste l'article
 		$em->persist($article);
+		// on persiste les 2 commentaires
+		$em->persist($comment1);
+		$em->persist($comment2);
 		// on "flush"
 		$em->flush();
 		

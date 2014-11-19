@@ -18,7 +18,24 @@
 
   <div class="well">
     {{ article.content|raw }}
+		{# On vérifie qu'une image soit bien associée à l'annonce #}
+		{% if article.image is not null %}
+			<img src="{{ article.image.url }}" alt="{{ article.image.alt }}">
+		{% endif %}
   </div>
+	{# on affiche les commentaires #}
+	<h3>Commentaires</h3>
+	{% if comments is not empty %}
+	<ul>
+	{% for comment in comments %}
+		<li>
+			<p>{{ comment.content}}</p>
+			<i>Par {{ comment.author }}, le {{ comment.date|date('d/m/Y') }}</i>
+		</li>
+	{% endfor %}
+	</ul>
+	{% endif %}
+	
 
   <p>
     <a href="{{ path('proj_article_articles') }}" class="btn btn-default">
