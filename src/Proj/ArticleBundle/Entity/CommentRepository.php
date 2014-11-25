@@ -3,6 +3,7 @@
 namespace Proj\ArticleBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * CommentRepository
@@ -12,4 +13,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommentRepository extends EntityRepository
 {
+	// on récupère les X derniers commentaires avec leur article associé
+	public function getCommentsWithArticle($limit)
+	{
+		$qb = $this->createQueryBuilder('c');
+			->join('c.article', 'a')
+			->addSelect('a');
+		if(is_int($limit) && $limit > 0)	
+			$qb->setMaxResults($limit);
+		
+		return $qb
+			->getQuery()
+			->getResult();
+	}
 }

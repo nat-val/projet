@@ -92,6 +92,22 @@ class ArticleController extends Controller
 	
 	public function deleteAction($id)
 	{
+		$em = $this->getDoctrine()->getManager();
+
+    // On récupère l'article $id
+    $article = $em->getRepository('ProjArticleBundle:Article')->find($id);
+
+    if (null === $article) {
+      throw new NotFoundHttpException("L'article d'id ".$id." n'existe pas.");
+    }
+		
+		 // On supprime les catégories
+    foreach ($article->getCategories() as $category) {
+      $article->removeCategory($category);
+    }
+
+    // On déclenche la modification
+    $em->flush();
 		return $this->render('ProjArticleBundle:Article:delete.html.twig', array('article_id' => $id));
 	}
 	

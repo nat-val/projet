@@ -64,9 +64,16 @@ class Article
 		private $image;
 
 		/**
+		 * @var \Doctrine\Common\Collections\Collection
+		 *
 		 * @ORM\ManyToMany(targetEntity="Proj\ArticleBundle\Entity\Category", cascade={"persist"})
 		 */
-		private $categories; 
+		private $categories;
+
+		/**
+		 * @ORM\OneToMany(targetEntity="Proj\ArticleBundle\Entity\Comment", mappedBy="article")
+		 */
+		private $comments;
 
 		public function __construct()
 		{
@@ -220,5 +227,38 @@ class Article
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param \Proj\ArticleBundle\Entity\Category $category
+     * @return Article
+     */
+    public function addCategory(\Proj\ArticleBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Proj\ArticleBundle\Entity\Category $category
+     */
+    public function removeCategory(\Proj\ArticleBundle\Entity\Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

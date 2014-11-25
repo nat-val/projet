@@ -68,7 +68,14 @@ class Article
 		 *
 		 * @ORM\ManyToMany(targetEntity="Proj\ArticleBundle\Entity\Category", cascade={"persist"})
 		 */
-		private $categories; 
+		private $categories;
+
+		/**
+		 * @var \Doctrine\Common\Collections\Collection
+		 *
+		 * @ORM\OneToMany(targetEntity="Proj\ArticleBundle\Entity\Comment", mappedBy="article")
+		 */
+		private $comments;
 
 		public function __construct()
 		{
@@ -225,7 +232,7 @@ class Article
     }
 
     /**
-     * Add categories
+     * Add category
      *
      * @param \Proj\ArticleBundle\Entity\Category $category
      * @return Article
@@ -238,7 +245,7 @@ class Article
     }
 
     /**
-     * Remove categories
+     * Remove category
      *
      * @param \Proj\ArticleBundle\Entity\Category $category
      */
@@ -255,5 +262,41 @@ class Article
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \Proj\ArticleBundle\Entity\Comment $comment
+     * @return Article
+     */
+    public function addComment(\Proj\ArticleBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+				
+				// on lie l'article au commentaire
+				$comment->setArticle($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \Proj\ArticleBundle\Entity\Comment $comment
+     */
+    public function removeComment(\Proj\ArticleBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }
