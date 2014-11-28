@@ -13,12 +13,17 @@ class ArticleController extends Controller
 {
     public function indexAction($page)
     {
-		if ($page < 1) {
-		  // On déclenche une exception NotFoundHttpException, cela va afficher
-		  // une page d'erreur 404
-		  throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
-		}
-        return $this->render('ProjArticleBundle:Article:index.html.twig', array('articles_list' => array()));
+			if ($page < 1) {
+				// On déclenche une exception NotFoundHttpException, cela va afficher
+				// une page d'erreur 404
+				throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
+			}
+			$articles_list = $this->getDoctrine()
+			->getManager()
+			->getRepository('ProjArticleBundle:Article')
+			->findAll();
+			
+      return $this->render('ProjArticleBundle:Article:index.html.twig', array('articles_list' => $articles_list));
     }
 	
 	public function viewAction($id)
@@ -86,7 +91,18 @@ class ArticleController extends Controller
 	
 	public function editAction($id)
 	{
-		$article = array('id' => $id, 'title' => 'mon article', 'content' => 'contenu de l\'article', 'author' => 'moi-meme', 'date' => new \Datetime());
+		// on récupère l'entity Manager
+		$em = $this->getDoctrine()->getManager();
+		// on récupère l'entité correspondante à l'id
+		$article = $em->getRepository('ProjArticleBundle:Article')->find($id);
+		if($article === null)
+		{
+			throw new NotFoundHttpException("Cet article n'existe pas.");
+		}
+		$articleContent = $article->getContent();
+		$article->setContent($articleContent.' , ajout de modification');
+		$article->setTitle("nouveau titre d'article !");
+		$em->flush();
 		return $this->render('ProjArticleBundle:Article:edit.html.twig', array('article' => $article));
 	}
 	
@@ -111,13 +127,22 @@ class ArticleController extends Controller
 		return $this->render('ProjArticleBundle:Article:delete.html.twig', array('article_id' => $id));
 	}
 	
-	public function menuAction()
+	public function menuAction($limit = 3)
 	{
-		$articles_list = array(
+		$articles_list = $this->getDoctrine()
+			->getManager()
+			->getRepository('ProjArticleBundle:Article')
+			->findBy(
+				array(),
+				array('date' => 'desc'),
+				$limit,
+				0);
+		
+		/*$articles_list = array(
 			array('id' => 2, 'title' => 'La recette de la brioche'),
 			array('id' => 5, 'title' => "L'arc en ciel"),
 			array('id' => 9, 'title' => 'Astronomie pour débutant')
-		);
+		);*/
 		return $this->render('ProjArticleBundle:Article:menu.html.twig', array('articles_list' => $articles_list));
 	}
 }

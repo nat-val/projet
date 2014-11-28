@@ -16,7 +16,7 @@ class CommentRepository extends EntityRepository
 	// on récupère les X derniers commentaires avec leur article associé
 	public function getCommentsWithArticle($limit)
 	{
-		$qb = $this->createQueryBuilder('c');
+		$qb = $this->createQueryBuilder('c')
 			->join('c.article', 'a')
 			->addSelect('a');
 		if(is_int($limit) && $limit > 0)	

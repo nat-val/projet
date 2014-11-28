@@ -3,12 +3,14 @@
 namespace Proj\ArticleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Article
  *
  * @ORM\Table(name="article")
  * @ORM\Entity(repositoryClass="Proj\ArticleBundle\Entity\ArticleRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Article
 {
@@ -76,13 +78,36 @@ class Article
 		 * @ORM\OneToMany(targetEntity="Proj\ArticleBundle\Entity\Comment", mappedBy="article")
 		 */
 		private $comments;
+		
+		/**
+		 * @var \DateTime
+		 *
+		 * @ORM\Column(name="updated_date", type="datetime", nullable=true)
+		 */
+		private $updatedDate;
+
+		/**
+		 * @var string
+		 *
+		 * @Gedmo\Slug(fields={"title"})
+		 * @ORM\Column(length=128, unique=true)
+		 */
+		private $slug; 
 
 		public function __construct()
 		{
 			// par défaut date de l'article est le jour même
 			$this->date = new \Datetime();
-		}
-
+		} 
+		
+		/**
+		 * @ORM\PreUpdate
+		 */
+		public function updateDate()
+		{
+			$this->setUpdatedDate(new \Datetime());
+		}		
+		
     /**
      * Get id
      *
@@ -298,5 +323,51 @@ class Article
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Set updatedDate
+     *
+     * @param \DateTime $updatedDate
+     * @return Article
+     */
+    public function setUpdatedDate($updatedDate)
+    {
+        $this->updatedDate = $updatedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedDate
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedDate()
+    {
+        return $this->updatedDate;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Article
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }
